@@ -9,3 +9,12 @@ def hello_world():
 @app.route("/list")
 def lit_test():
     return ["hi", 'how are you']
+
+
+@app.route("/json")
+def lit_test():
+    return {
+        "name" : "youssef",
+        "password" : "ydnduèjej22",
+        "email" : "test@gmail.com"
+    }
