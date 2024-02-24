@@ -15,6 +15,7 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
 
 - Python 3.8+
 - SQLite (for local development)
+- PostgresSQL (for productin)
 - Flask
 - Flask-SQLAlchemy
 - Flask-Migrate
