@@ -9,4 +9,5 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///bank.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv("DB_TRACK_MODIFICATIONS", False)
-    API_VERSION = os.getenv("API_VERSION", "/api/v1")
+    API_VERSION = os.getenv("API_VERSION", "/api/v1") 
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")

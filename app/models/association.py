@@ -1,4 +1,4 @@
-from models import db
+from app.models import db
 
 User_Role = db.Table(
     "users_roles",

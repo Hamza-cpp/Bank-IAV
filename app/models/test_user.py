@@ -1,4 +1,4 @@
-from models import db
+from app.models import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -14,3 +14,4 @@ class Test_User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
