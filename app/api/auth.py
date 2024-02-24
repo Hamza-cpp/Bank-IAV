@@ -1,9 +1,9 @@
 from flask import request, Blueprint, jsonify
-from werkzeug.security import generate_password_hash
 from app import db
 from app.models.user import User
+from app.api import API_VERSION
 
-auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+auth_bp = Blueprint("auth", __name__, url_prefix=API_VERSION + "/auth")
 
 
 @auth_bp.route("/register", methods=["POST"])
