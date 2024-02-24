@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from app.models import db
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 
 
 def create_app(config_class=Config):
@@ -10,7 +11,7 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     Migrate(app, db)
-
+    jwt = JWTManager(app)
     from app.api.auth import auth_bp
 
     app.register_blueprint(auth_bp)

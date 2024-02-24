@@ -1,4 +1,4 @@
-from models import db
+from app.models import db
 import datetime
 from association import User_Role, User_Beneficiary
 
