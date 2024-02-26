@@ -13,12 +13,15 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
 
 ### **Prerequisites**
 
-- Python 3.8+
-- SQLite (for local development)
-- PostgresSQL (for productin)
-- Flask
-- Flask-SQLAlchemy
-- Flask-Migrate
+- **Python (3.10):** The programming language.
+- **Flask (3.0.2)**: Serves as the foundational web framework for building the **Bank-IAV API**. Flask is lightweight and modular, making it a good choice for building scalable applications.
+- **Flask-Migrate (4.0.5)**: Utilized for handling database migrations. This is crucial in a banking application where the data model may evolve over time, requiring changes to the database schema without loss of data.
+- **Flask-SQLAlchemy (3.1.1)**: Offers an ORM layer for interacting with the database, simplifying database transactions and queries.
+- **Flask-JWT-Extended (4.6.0)**: Adds support for JWT-based authentication, ensuring secure user authentication and session management.
+- **psycopg2-binary (2.9.9)**: Provides PostgreSQL database connectivity, a reliable and powerful database choice for financial applications where transactions and data integrity are critical.
+- **python-dotenv (1.0.1)**: Manages environment variables, helping in configuring the application in different environments (development, testing, production) without hard-coding configuration values.
+- **SQLite** (for local development)
+- **PostgresSQL** (for productin)
 
 ### **Installation**
 

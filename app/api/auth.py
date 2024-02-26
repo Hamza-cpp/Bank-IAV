@@ -1,30 +1,15 @@
 from flask import request, Blueprint, jsonify
-from flask_jwt_extended import create_access_token
+from app.services.auth_service import authenticate_user
 from app import db
 from app.models.test_user import Test_User
 from app.api import API_VERSION
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 auth_bp = Blueprint("auth", __name__, url_prefix=API_VERSION + "/auth")
 
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    user = Test_User.query.filter_by(username=data["username"]).first()
-    if user:
-        return jsonify({"message": "User already exists."}), 409
-
-    new_user = Test_User(username=data["username"], email=data["email"])
-    new_user.set_password(data["password"])
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({"message": "User registered successfully."}), 201
-
-
-@auth_bp.route("/registerjwt", methods=["POST"])
-def registerJwt():
     data = request.get_json()
     username = data.get("username")
     email = data.get("email")
@@ -33,33 +18,68 @@ def registerJwt():
     if not username or not email or not password:
         return jsonify({"msg": "Username, email, and password are required"}), 400
 
-    if (
-        Test_User.query.filter_by(username=username).first()
-        or Test_User.query.filter_by(email=email).first()
-    ):
-        return jsonify({"msg": "User with given email/username already exists"}), 409
+    if Test_User.query.filter_by(email=email).first():
+        return jsonify({"msg": "User with given email already exists"}), 409
+    if Test_User.query.filter_by(username=username).first():
+        return jsonify({"msg": "User with given username already exists"}), 409
 
-    new_user = Test_User(username=username, email=email)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
+    try:
+        new_user = Test_User(username=username, email=email)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+    except Exception as e:
+        print(f"An error occurred during user registration: {e}")
+        return jsonify({"msg": "An error occurred", "error": str(e)}), 500
 
     return jsonify({"msg": "User created successfully"}), 201
 
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
     data = request.get_json()
     username = data.get("username")
+    email = data.get("email")
     password = data.get("password")
 
-    if not username or not password:
-        return jsonify({"msg": "Missing username or password"}), 400
+    if not (username or email):
+        return jsonify({"msg": "Missing username or email"}), 400
+    if not password:
+        return jsonify({"msg": "Missing password"}), 400
 
-    user = Test_User.query.filter_by(username=username).first()
+    if username and email:
+        return jsonify({"msg": "Provide either username or email, not both"}), 400
 
-    if user and user.check_password(password):
-        access_token = create_access_token(identity=[username,password])
-        return jsonify(access_token=access_token), 200
+    if email:
+        user_data = email
+        login_method = "email"
+    else:
+        user_data = username
+        login_method = "username"
 
-    return jsonify({"msg": "Invalid credentials"}), 401
+    authentication = authenticate_user(user_data, password)
+
+    if authentication:
+        return jsonify(authentication), 200
+    else:
+        return jsonify({"msg": f"Invalid {login_method} or password"}), 401
+
+
+@auth_bp.route("/refresh", methods=["POST"])
+@jwt_required(refresh=True)
+def refresh_token():
+    """
+    Endpoint to refresh an access token using a refresh token.
+
+    Returns:
+        JSON: A dictionary containing a new access token if successful, error message otherwise.
+    """
+    try:
+        current_user_id = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user_id)
+        return jsonify({"access_token": new_access_token}), 200
+    except Exception as e:
+        return jsonify({"message": "Token refresh failed", "error": str(e)}), 500
