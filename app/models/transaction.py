@@ -1,6 +1,11 @@
 from app.models import db
 from datetime import datetime
 
+DEPOSIT_TRANSACTION = "deposit"
+TRANSFER_TRANSACTION = "transfer"
+WITHDRAWAL_TRANSACTION = "withdrawal"
+
+
 class Transaction(db.Model):
     __tablename__ = "transactions"
     id = db.Column(db.Integer, primary_key=True)

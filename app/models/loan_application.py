@@ -1,6 +1,11 @@
 from app.models import db
 from datetime import datetime
 
+SUBMETED_LOAN = "submeted"
+PENDING_LOAN = "pending"
+APPROVED_LOAN = "approved"
+REJECTED_LOAN = "rejected"
+
 
 class LoanApplication(db.Model):
     __tablename__ = "loan_applications"
@@ -11,7 +16,9 @@ class LoanApplication(db.Model):
     duration = db.Column(db.Integer)
     interest_rate = db.Column(db.Numeric(5, 2))
     monthly_payment = db.Column(db.Numeric(10, 2))
-    status = db.Column(db.String, default="SUBMETED")  # SUBMETED, PENDING, APPROVED, REJECTED
+    status = db.Column(
+        db.String, default="submeted"
+    )  # SUBMETED, PENDING, APPROVED, REJECTED
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
     reviewed_by = db.Column(db.String, nullable=True)
     reviewed_at = db.Column(db.DateTime, nullable=True)

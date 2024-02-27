@@ -2,6 +2,10 @@ from app.models import db
 from datetime import datetime
 from app.models.transaction import Transaction
 
+ACTIVE_ACCOUNT = "active"
+SUSPENDED_ACCOUNT = "suspended"
+
+
 class Account(db.Model):
     __tablename__ = "accounts"
     id = db.Column(db.Integer, primary_key=True)

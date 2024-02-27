@@ -1,8 +1,8 @@
 from app.models import db
 from app.models.association import User_Role
 
-ADMIN = "admin"
-CLIENT = "client"
+ADMIN_ROLE = "admin"
+CLIENT_ROLE = "client"
 
 
 class Role(db.Model):
