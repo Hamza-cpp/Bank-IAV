@@ -1,5 +1,5 @@
 from app.models import db
-import datetime
+from datetime import datetime
 
 class Transaction(db.Model):
     __tablename__ = "transactions"
@@ -11,5 +11,5 @@ class Transaction(db.Model):
     description = db.Column(db.String, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     initiated_by = db.Column(db.String, nullable=True)
-    # Relation vers Account
+    # Relation to Account
     account = db.relationship("Account", back_populates="transactions")

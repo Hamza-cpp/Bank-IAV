@@ -1,7 +1,8 @@
 from flask import request, Blueprint, jsonify
-from app.services.auth_service import authenticate_user
+from app.models.role import Role
+from app.services.auth_service import authenticate_user, requires_roles
 from app import db
-from app.models.test_user import Test_User
+from app.models.user import User
 from app.api import API_VERSION
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
@@ -10,6 +11,8 @@ auth_bp = Blueprint("auth", __name__, url_prefix=API_VERSION + "/auth")
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
     data = request.get_json()
     username = data.get("username")
     email = data.get("email")
@@ -18,13 +21,13 @@ def register():
     if not username or not email or not password:
         return jsonify({"msg": "Username, email, and password are required"}), 400
 
-    if Test_User.query.filter_by(email=email).first():
+    if User.query.filter_by(email=email).first():
         return jsonify({"msg": "User with given email already exists"}), 409
-    if Test_User.query.filter_by(username=username).first():
+    if User.query.filter_by(username=username).first():
         return jsonify({"msg": "User with given username already exists"}), 409
 
     try:
-        new_user = Test_User(username=username, email=email)
+        new_user = User(username=username, email=email, roles=[Role(name="admin")])
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
@@ -83,3 +86,23 @@ def refresh_token():
         return jsonify({"access_token": new_access_token}), 200
     except Exception as e:
         return jsonify({"message": "Token refresh failed", "error": str(e)}), 500
+
+
+@auth_bp.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    """
+    Endpoint to refresh an access token using a refresh token.
+
+    Returns:
+        JSON: A dictionary containing a new access token if successful, error message otherwise.
+    """
+    return jsonify({"msg": "welcome"})
+
+
+@auth_bp.route("/transfer", methods=["POST"])
+@jwt_required()
+@requires_roles("client","admin")
+def transfer_money():
+    # Your money transfer logic here
+    return jsonify({"msg": "Money transferred successfully"})

@@ -1,5 +1,6 @@
 from app.models import db
-import datetime
+from datetime import datetime
+from app.models.transaction import Transaction
 
 class Account(db.Model):
     __tablename__ = "accounts"
@@ -13,4 +14,4 @@ class Account(db.Model):
     status = db.Column(db.String, default="ACTIVE")  # eg. ACTIVE, SUSPENDED
     # Relations
     user = db.relationship("User", back_populates="accounts")
-    transactions = db.relationship("Transaction", back_populates="accounts")
+    transactions = db.relationship("Transaction", back_populates="account")

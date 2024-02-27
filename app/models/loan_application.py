@@ -1,5 +1,5 @@
 from app.models import db
-import datetime
+from datetime import datetime
 
 
 class LoanApplication(db.Model):
@@ -15,5 +15,5 @@ class LoanApplication(db.Model):
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
     reviewed_by = db.Column(db.String, nullable=True)
     reviewed_at = db.Column(db.DateTime, nullable=True)
-    # Relation de retour vers User
+    # Relation to User
     user = db.relationship("User", back_populates="loan_applications")
