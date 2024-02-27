@@ -29,8 +29,10 @@ def create_app(config_class=Config):
         return {"roles": [role.name for role in user.roles]}
 
     from app.api.auth import auth_bp
+    from app.api.user_controller import accounts_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(accounts_bp)
     # app.register_blueprint(user.bp)
     # app.register_blueprint(account.bp)
 

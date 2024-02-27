@@ -1,5 +1,4 @@
 from flask import request, Blueprint, jsonify
-from app.models.role import Role
 from app.services.auth_service import authenticate_user, requires_roles
 from app import db
 from app.models.user import User
@@ -27,7 +26,7 @@ def register():
         return jsonify({"msg": "User with given username already exists"}), 409
 
     try:
-        new_user = User(username=username, email=email, roles=[Role(name="admin")])
+        new_user = User(username=username, email=email)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
