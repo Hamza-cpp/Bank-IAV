@@ -30,9 +30,11 @@ def create_app(config_class=Config):
 
     from app.api.auth import auth_bp
     from app.api.user_controller import accounts_bp
+    from app.api.admin_controller import bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(accounts_bp)
+    app.register_blueprint(bp)
     # app.register_blueprint(user.bp)
     # app.register_blueprint(account.bp)
 
