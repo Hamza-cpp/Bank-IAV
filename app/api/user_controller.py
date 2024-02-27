@@ -5,10 +5,10 @@ from app.models.user import User
 from app.api import API_VERSION
 
 
-accounts_bp = Blueprint("accounts", __name__, url_prefix=API_VERSION + "/accounts")
+user_bp = Blueprint("user", __name__, url_prefix=API_VERSION + "/accounts")
 
 
-@accounts_bp.route("/dashboard", methods=["GET"])
+@user_bp.route("/dashboard", methods=["GET"])
 @jwt_required()
 def dashboard_summary():
     current_user_id = get_jwt_identity()
