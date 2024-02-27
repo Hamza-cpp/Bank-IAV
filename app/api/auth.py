@@ -4,6 +4,7 @@ from app import db
 from app.models.user import User
 from app.api import API_VERSION
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from app.utils.validators import is_valid_email
 
 auth_bp = Blueprint("auth", __name__, url_prefix=API_VERSION + "/auth")
 
@@ -19,6 +20,8 @@ def register():
 
     if not username or not email or not password:
         return jsonify({"msg": "Username, email, and password are required"}), 400
+    if not is_valid_email(email=email):
+        return jsonify({"msg": "Email is invalide"}), 400
 
     if User.query.filter_by(email=email).first():
         return jsonify({"msg": "User with given email already exists"}), 409
@@ -101,7 +104,7 @@ def protected():
 
 @auth_bp.route("/transfer", methods=["POST"])
 @jwt_required()
-@requires_roles("client","admin")
+@requires_roles("client", "admin")
 def transfer_money():
     # Your money transfer logic here
     return jsonify({"msg": "Money transferred successfully"})
