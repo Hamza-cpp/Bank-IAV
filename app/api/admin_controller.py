@@ -2,6 +2,7 @@ from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint
 from app.models.role import Role, ADMIN_ROLE, CLIENT_ROLE
 from app.models.account import ACTIVE_ACCOUNT, SUSPENDED_ACCOUNT, Account
+from app.models.user import User
 from app.services.auth_service import requires_roles
 from app import db
 from app.api import API_VERSION
