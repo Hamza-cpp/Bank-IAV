@@ -17,7 +17,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-    is_active = db.Column(db.Boolean,default=False)
+    is_active = db.Column(db.Boolean, default=False)
     # Relations
     profile = db.relationship("UserProfile", back_populates="user", uselist=False)
     accounts = db.relationship("Account", back_populates="user")
