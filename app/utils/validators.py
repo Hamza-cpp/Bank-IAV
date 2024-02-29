@@ -15,6 +15,11 @@ from app.models.transaction import (
 )
 
 
+email_regex = re.compile(
+    r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])"
+)
+
+
 def is_valid_email(email):
     """
     Validates an email address based on a regular expression and additional checks.
@@ -26,17 +31,7 @@ def is_valid_email(email):
       bool: True if the email is valid, False otherwise.
     """
 
-    email_regex = r"(^[-!#$%&'*+/=?^_`{|}~a-zA-Z0-9]+(\.[-!#$%&'*+/=?^_`{|}~a-zA-Z0-9]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$)"
-
-    if not re.match(email_regex, email):
-        return False
-
-    # Additional checks:
-    # - Non-empty domain name
-    if len(email.split("@")[-1]) == 0:
-        return False
-    # - At least one character before "@"
-    if len(email.split("@")[0]) == 0:
+    if not re.fullmatch(email_regex, email):
         return False
 
     return True
