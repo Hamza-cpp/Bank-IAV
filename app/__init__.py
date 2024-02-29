@@ -1,9 +1,12 @@
 from flask import Flask
-from config import Config
-from app.models import db
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
+from config import Config
+from app.models import db
 from app.models.user import User
+
+mail = Mail()
 
 
 def create_app(config_class=Config):
@@ -13,6 +16,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     Migrate(app, db)
     jwt = JWTManager(app)
+    mail.init_app(app)
 
     @jwt.additional_claims_loader
     def add_claims_to_access_token(identity):
