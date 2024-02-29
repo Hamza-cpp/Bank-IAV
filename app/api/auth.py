@@ -174,7 +174,7 @@ def confirm_email(token):
             400,
         )
     except BadSignature:
-        return jsonify({"error": "The verification token is invalid."}}), 400
+        return jsonify({"error": "The verification token is invalid."}), 400
     except Exception as e:
         print(f"An error occurred during email verification: {str(e)}")
         return jsonify({"error": "An error occurred during verification."}), 500
