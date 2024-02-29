@@ -1,8 +1,7 @@
 from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint
-from app.models.user import User
 from app.models.role import Role, ADMIN_ROLE, CLIENT_ROLE
-from app.models.account import ACTIVE_ACCOUNT, SUSPENDED_ACCOUNT
+from app.models.account import ACTIVE_ACCOUNT, SUSPENDED_ACCOUNT, Account
 from app.services.auth_service import requires_roles
 from app import db
 from app.api import API_VERSION
@@ -17,44 +16,50 @@ admin_bp = Blueprint("admin", __name__, url_prefix=API_VERSION + "/admin")
 
 
 @admin_bp.route(
-    "/update_account_status/<string:email>/<string:status>", methods=["PUT"]
+    "/update_account_status/<integer:accountID>/<string:status>", methods=["PUT"]
 )
 @jwt_required()
 @requires_roles(ADMIN_ROLE)
-def update_account_status(email, status):
+def update_account_status(accountID, status):
     """
-    This function updates the account status of a user.
+    Update the account status of a user.
 
-    :param email: The email of the user to update.
-    :param status: The new status of the user's account. Must be either 'active' or 'suspended'.
-    :return: A message indicating whether the user was updated successfully.
+    Args:
+        accountID (int): The ID of the user's account to update.
+        status (str): The new status of the user's account. Must be either 'active' or 'suspended'.
+
+    Returns:
+        JSON: A JSON response indicating whether the account was updated successfully.
+            If the account status is successfully updated, a success message is returned.
+            If the provided status is invalid, an error message is returned.
+            If the account with the provided ID is not found, a '404 Not Found' error message is returned.
+
+    Raises:
+        None
     """
     if not is_valid_account_status(status):
         return (
             jsonify(
                 {
-                    "message": f"Invalid status. Use '{ACTIVE_ACCOUNT}' or '{SUSPENDED_ACCOUNT}'."
+                    "error": f"Invalid status. Use '{ACTIVE_ACCOUNT}' or '{SUSPENDED_ACCOUNT}'."
                 }
             ),
-            400,
-        )
-    if not is_valid_email(email=email):
-        return (
-            jsonify({"message": "Invalid email formate."}),
-            400,
+            422,
         )
 
-    user_to_update = User.query.filter_by(email=email).first()
-    if not user_to_update:
-        return jsonify({"message": "User not found"}), 404
+    account_to_update = Account.query.get(accountID).first()
+    if not account_to_update:
+        return jsonify({"message": "Account not found"}), 404
 
-    user_to_update.is_active = status == ACTIVE_ACCOUNT
+    account_to_update.status = status
     db.session.commit()
 
     action = "activated" if status == ACTIVE_ACCOUNT else "deactivated"
     return (
         jsonify(
-            {"message": f"User {user_to_update.email} has been successfully {action}."}
+            {
+                "message": f"Account ID {account_to_update.account_id} has been successfully {action}."
+            }
         ),
         200,
     )

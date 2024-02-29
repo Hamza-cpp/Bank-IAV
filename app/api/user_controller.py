@@ -5,7 +5,7 @@ from app.models.user import User
 from app.api import API_VERSION
 
 
-user_bp = Blueprint("user", __name__, url_prefix=API_VERSION + "/accounts")
+user_bp = Blueprint("user", __name__, url_prefix=API_VERSION + "/users")
 
 
 @user_bp.route("/dashboard", methods=["GET"])
