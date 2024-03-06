@@ -17,7 +17,7 @@ admin_bp = Blueprint("admin", __name__, url_prefix=API_VERSION + "/admin")
 
 
 @admin_bp.route(
-    "/update_account_status/<integer:accountID>/<string:status>", methods=["PUT"]
+    "/update_account_status/<int:accountID>/<string:status>", methods=["PUT"]
 )
 @jwt_required()
 @requires_roles(ADMIN_ROLE)
