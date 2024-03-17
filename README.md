@@ -50,7 +50,7 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
     Make sure you have Flask-Migrate initialized and then run:
 
     ```bash
-    flask db upgrade
+    flask db upgrade head
     ```
 
     This applies the existing migrations to your database, setting up necessary tables.
