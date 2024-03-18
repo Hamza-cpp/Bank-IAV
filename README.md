@@ -21,7 +21,7 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
 - **psycopg2-binary (2.9.9)**: Provides PostgreSQL database connectivity, a reliable and powerful database choice for financial applications where transactions and data integrity are critical.
 - **python-dotenv (1.0.1)**: Manages environment variables, helping in configuring the application in different environments (development, testing, production) without hard-coding configuration values.
 - **SQLite** (for local development)
-- **PostgresSQL** (for productin)
+- **PostgresSQL** (for production)
 
 ### **Installation and running locally**
 
@@ -84,14 +84,14 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
      docker compose up flask_db
      ```
 
-    This will start the the PostgreSQL database container defined in the `docker-compose.yml` file.
+    This will start the PostgreSQL database container defined in the `docker-compose.yml` file.
  3. **Build and run the second Docker Compose Service (flask_app)**
 
      ```bash
      docker compose up flask_app
      ```
 
-    This will start the the flask application container defined in the `docker-compose.yml` file.
+    This will start the flask application container defined in the `docker-compose.yml` file.
 
 **Note:** Before running the application, make sure to create a `.env` file in the root directory of the project. You can use the `.env.example` file as a template and fill in the necessary configuration values.
 
