@@ -23,7 +23,7 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
 - **SQLite** (for local development)
 - **PostgresSQL** (for productin)
 
-### **Installation**
+### **Installation and running locally**
 
 1. **Clone the Repository**
 
@@ -32,11 +32,11 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
     cd Bank-IAV
     ```
 
-2. **Set Up a Virtual Environment**
+2. **Set Up a Virtual Environment and activate it**
 
     ```bash
     python3 -m venv .venv
-    source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
+    source .venv/bin/activate 
     ```
 
 3. **Install Dependencies**
@@ -45,23 +45,55 @@ The **`Bank-IAV`** is a robust, scalable backend designed to power banking appli
     pip install -r requirements.txt
     ```
 
-4. **Initialize the Database**
+4. **Install and Run PostgreSQL**
 
-    Make sure you have Flask-Migrate initialized and then run:
+    - Install PostgreSQL on your machine. You can download it from the official website: [PostgreSQL Downloads](https://www.postgresql.org/download/).
+
+    - Start the PostgreSQL server.
+
+    > **Note:** Before proceeding to the next step, ensure that the PostgreSQL server is up and running on the default port(5432).
+
+5. **Initialize the Database and Apply Migrations**
 
     ```bash
     flask db upgrade head
     ```
 
-    This applies the existing migrations to your database, setting up necessary tables.
+    This command applies the existing migrations to your database, setting up necessary tables.
 
-5. **Run the Application**
+6. **Run the Application**
 
     ```bash
-    flask run
-    # Or
     python run.py
     ```
+
+**Note:** Before running the application, make sure to create a `.env` file in the root directory of the project. You can use the `.env.example` file as a template and fill in the necessary configuration values.
+
+### **Installation and Running with Docker**
+
+ 1. **Clone the Repository**
+
+     ```bash
+     git clone https://github.com/Hamza-cpp/Bank-IAV.git
+     cd Bank-IAV
+     ```
+
+ 2. **Build and run the first Docker Compose Service (flask_db)**
+
+     ```bash
+     docker compose up flask_db
+     ```
+
+    This will start the the PostgreSQL database container defined in the `docker-compose.yml` file.
+ 3. **Build and run the second Docker Compose Service (flask_app)**
+
+     ```bash
+     docker compose up flask_app
+     ```
+
+    This will start the the flask application container defined in the `docker-compose.yml` file.
+
+**Note:** Before running the application, make sure to create a `.env` file in the root directory of the project. You can use the `.env.example` file as a template and fill in the necessary configuration values.
 
 ### **Project Structure**
 
@@ -117,7 +149,7 @@ After running the application, you can interact with it using HTTP requests. For
 - **Register a New User**
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"username":"john_doe", "email":"john@example.com", "password":"123456"}' http://127.0.0.1:5000/auth/register
+    curl -X POST -H "Content-Type: application/json" -d '{"username":"john_doe", "email":"john@example.com", "password":"123456"}' http://127.0.0.1:5000/api/v1/auth/register
     ```
 
 ## **Contributing**
